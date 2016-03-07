@@ -1,5 +1,16 @@
-"""network_interson.py
+"""
+network_interson.py
 ~~~~~~~~~~~~~~
+This a variation from the network3.py file of Michael Nielsen's book "Neural Networks and Deep Learning"
+URL: http://neuralnetworksanddeeplearning.com/
+
+We have added a class call ConvLayer, which performs a Convolution with weights W and b.
+
+Also this code contains several learning algorithms, which where extracted from Lasagne github page.
+URL: https://github.com/Lasagne/Lasagne
+
+In addition, the code within the SGD class includes Early Stopping, which can be change with the variable tolerance
+(set by default to 8). And we are saving the training and validation loss for further analysis.
 
 """
 
@@ -582,13 +593,20 @@ class Network():
                 training_y[i*self.mini_batch_size: (i+1)*self.mini_batch_size]
             })
         validate_mb_accuracy = theano.function(
-            [i], self.layers[-1].accuracy(self.y),
+            [i], self.layers[-1].accuracy(self.y)
+            givens={
+                self.x:
+                training_x[i*self.mini_batch_size: (i+1)*self.mini_batch_size],
+                self.y: 
+                training_y[i*self.mini_batch_size: (i+1)*self.mini_batch_size]
+            })
             givens={
                 self.x: 
                 validation_x[i*self.mini_batch_size: (i+1)*self.mini_batch_size],
                 self.y: 
                 validation_y[i*self.mini_batch_size: (i+1)*self.mini_batch_size]
             })
+        validate_mb_loss = theano.function([i], cost1,
         test_mb_accuracy = theano.function(
             [i], self.layers[-1].accuracy(self.y),
             givens={
