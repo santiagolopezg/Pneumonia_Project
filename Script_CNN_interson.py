@@ -1,3 +1,12 @@
+'''
+
+Script_CNN_interson.py:
+This code run the simulation of 64 convolutional neural network with different hyperparameters for further evaluation.
+We are running a 17 layer Convolutional Neural Network for Lungs Ultrasound images with 256 x 256 pixel dimensions.
+Finally we are saving the network into a Pickle file with the name:
+net_l1_deform_<learning>_<lambda>_<mini_batch>_<dropout>.pkl
+
+'''
 from datetime import datetime
 startTime = datetime.now()
 possible_learning_rate = [5.0,3.0,2.0,1.0,1.0/10.0,1.0/100.0,1.0/1000.0,1/10000.0] #8
