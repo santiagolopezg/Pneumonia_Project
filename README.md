@@ -4,7 +4,7 @@ This is project from the Bioinformatics Unit at Universidad Peruana Cayetano Her
 In this project, we use a Convolutional Neural Network to classify ultrasound images of people with or without pneumonia.
 
 ##Collaborators:
-  Josue Ortega Caro \n
-  Santiago Lopez \n
-  Franklin Barrientos \n
-  Ronald Barrientos \n
+  Josue Ortega Caro \\
+  Santiago Lopez \\
+  Franklin Barrientos \\ 
+  Ronald Barrientos \\
