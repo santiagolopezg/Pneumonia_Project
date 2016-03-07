@@ -3,7 +3,7 @@ analysis_network.py
 
 Goes through all the Pickle files within a folder (considering all of them are the files create by Script_CNN_interson.py), and
 Extract the best prediction validation and test value, iteration and the hyperparameters for that network.
-We do this for all the network and only safe the best 3 networks into the fil: analyze_networks_2100_80_deform.pkl
+We do this for all the networks and only safe the best 3 networks into the fil: analyze_networks_2100_80_deform.pkl
 
 '''
 # Standard library
