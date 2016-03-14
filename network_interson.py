@@ -556,7 +556,7 @@ class Network():
         self.output_dropout = self.layers[-1].output_dropout
 
     def SGD(self, training_data, epochs, mini_batch_size, eta, 
-            validation_data, test_data, lmbda=0.0, tolerance = 5):
+            validation_data, test_data, lmbda=0.0, tolerance = 10):
         """Train the network using mini-batch stochastic gradient descent."""
         training_x, training_y = training_data
         validation_x, validation_y = validation_data
@@ -596,17 +596,17 @@ class Network():
             [i], self.layers[-1].accuracy(self.y)
             givens={
                 self.x:
-                training_x[i*self.mini_batch_size: (i+1)*self.mini_batch_size],
-                self.y: 
-                training_y[i*self.mini_batch_size: (i+1)*self.mini_batch_size]
-            })
-            givens={
-                self.x: 
                 validation_x[i*self.mini_batch_size: (i+1)*self.mini_batch_size],
                 self.y: 
                 validation_y[i*self.mini_batch_size: (i+1)*self.mini_batch_size]
             })
-        validate_mb_loss = theano.function([i], cost1,
+   
+        validate_mb_loss = theano.function([i], cost1, givens={
+                self.x:
+                validation_x[i*self.mini_batch_size: (i+1)*self.mini_batch_size],
+                self.y: 
+                validation_y[i*self.mini_batch_size: (i+1)*self.mini_batch_size]
+            })
         test_mb_accuracy = theano.function(
             [i], self.layers[-1].accuracy(self.y),
             givens={
@@ -630,10 +630,12 @@ class Network():
         for epoch in xrange(epochs):
             for minibatch_index in xrange(num_training_batches):
                 iteration = num_training_batches*epoch+minibatch_index
-                if iteration % 1000 == 0: 
+                if iteration % 1000 == 0: \
                     print("Training mini-batch number {0}".format(iteration))
                 cost_ij = train_mb(minibatch_index) #training
+                validation_ij = validate_mb_loss(minibatch_index)
 		self.cost_train.append(cost_ij)
+		self.valores_train.append(validation_ij)
             if (iteration+1) % num_training_batches == 0:
 		validation_accuracy = np.mean(
                     [validate_mb_accuracy(j) for j in xrange(num_validation_batches)])
