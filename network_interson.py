@@ -4,7 +4,7 @@ network_interson.py
 This a variation from the network3.py file of Michael Nielsen's book "Neural Networks and Deep Learning"
 URL: http://neuralnetworksanddeeplearning.com/
 
-We have added a class call ConvLayer, which performs a Convolution with weights W and b.
+We have added a class call ConvLayer, which performs a Convolution with weights W and bias b.
 
 Also this code contains several learning algorithms, which where extracted from Lasagne github page.
 URL: https://github.com/Lasagne/Lasagne
