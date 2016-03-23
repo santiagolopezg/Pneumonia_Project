@@ -1,9 +1,8 @@
 # Pneumonia_Project
 
-This is project from the Bioinformatics Unit at Universidad Peruana Cayetano Heredia for Biomedical image classification.
+This is a project from the Bioinformatics Unit at Universidad Peruana Cayetano Heredia, for Biomedical image classification.
 
-We will use a Convolutional Neural Network to classify ultrasound images of people with or without pneumonia.
-
+We will use a Convolutional Neural Network to classify ultrasound images of patients, as presenting or not presenting pneumonia.
 
 
 **Collaborators:**
