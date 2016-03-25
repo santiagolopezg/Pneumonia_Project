@@ -28,7 +28,7 @@ from theano.tensor.nnet import conv
 from theano.tensor.nnet import softmax
 from theano.tensor import shared_randomstreams
 from theano.tensor.signal import downsample
-
+from theano.tensot.nnet import binary_crossentropy
 # Activation functions for neurons
 def linear(z): return z
 def ReLU(z): return T.maximum(0.0, z)
@@ -690,6 +690,9 @@ class SoftmaxLayer():
     def cost(self, net):
         "Return the log-likelihood cost."
         return -T.mean(T.log(self.output_dropout)[T.arange(net.y.shape[0]), net.y])
+        
+    def cost_2(self,net):
+    	return binary_crossentropy(self.output_dropout, net.y).mean()
 
     def accuracy(self, y):
         "Return the accuracy for the mini-batch."
