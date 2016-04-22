@@ -4,16 +4,26 @@ SLG
 '''
 
 from datetime import datetime
+########################################
+# Look for the data at:
+
+file_name = "../data/normal/neumonia_dataset_interson_elDeform_0_2.pkl"
+########################################
+# HyperParameters
 startTime = datetime.now()
-possible_learning_rate = [5.0,3.0,2.0,1.0,1.0/10.0,1.0/100.0,1.0/1000.0,1/10000.0] #8
-possible_lambda = [5.0,3.0,2.0,1.0,1.0/10.0,1.0/100.0,1.0/1000.0,1/10000.0] #8
+possible_learning_rate = [1,1.0/10.0,1.0/100.0,1.0/1000.0,1/10000.0] #5
+#possible_learning_rate = [1/10000.0] #5
+possible_lambda = [5.0,2.0,3.0,1.0,1.0/10.0,1.0/100.0,1.0/1000.0] #7
+#possible_lambda = [1.0] #7
 possible_mini_batch = [100]
-possible_dropout =0.5
+possible_dropout = 0.5
+########################################
+# Import libraries
 import cPickle
 import network_interson
 from network_interson import Network
-from network_interson import ConvPoolLayer, ConvLayer, FullyConnectedLayer, SoftmaxLayer
-training_data, validation_data, test_data = network_interson.load_data_shared()
+from layer_types import ConvPoolLayer, ConvLayer, FullyConnectedLayer, SigmoidLayer, SoftmaxLayer
+training_data, validation_data, test_data = network_interson.load_data_shared(filename= file_name)
 from network_interson import ReLU
 from theano.tensor import tanh
 
