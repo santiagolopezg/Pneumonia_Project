@@ -2,12 +2,13 @@
 This code allow us to plot the ROC curve for our experiment
 
 upd. 21.03.16 - Code re-structured for modularity + added ratios
+upd 29.03.16 - added compcost to compare losses
 '''
 import cPickle
 import matplotlib.pylab as plt
 import numpy as np
 import network_interson
-f = open('net_nice3_0.001_0.001_100_0.5.pkl','rb')
+f = open('net_SinEvid_0.001_0.001_100_0.5.pkl','rb')
 net = cPickle.load(f)
 f.close()
 
@@ -25,7 +26,7 @@ for i in xrange(len(true_positive)):
 
 for i in xrange(len(specificity)):
      specificity[i] = 1 - specificity[i]
-foo = raw_input('What would you like to print? \n {cost // ROC // sens/specif ratio (ratio1) // TP,TN,FP,FN ratio (ratio2) } \n')
+foo = raw_input('What would you like to print? \n {cost // ROC // sens/specif ratio (ratio1) // TP,TN,FP,FN ratio (ratio2) // compare costs (compcost)} \n')
 
 if foo == 'cost':
 	print 'Plotting loss vs. iteration. If this is not desired, then modify plot_network.py'
@@ -34,6 +35,25 @@ if foo == 'cost':
 	plt.xlabel('Iteration')
 	plt.ylabel('Loss')
 	plt.show()
+
+if foo == 'compcost':
+	print 'Comparing network losses vs. iteration. If this is not desired, then modify plot_network.py'
+	
+	cost = net.cost_train
+
+	f = open('net_shuffle2_0.001_0.001_100_0.5.pkl','rb')
+	cost2 = cPickle.load(f).cost_train
+	f.close()
+
+
+	plt.plot(cost, 'ro', label='880 vs 4000')
+	plt.plot(cost2, 'bo',label='Shuffled')
+
+	plt.xlabel('Iteration')
+	plt.ylabel('Loss')
+	plt.legend(loc='upper right')
+	plt.show()
+
 
 if foo == 'ROC':
 	print 'Plotting the ROC. If this is not desired, then modify plot_network.py'
