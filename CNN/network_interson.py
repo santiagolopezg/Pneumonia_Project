@@ -145,6 +145,7 @@ class Network():
         l2_norm_squared = sum([(layer.w**2).sum() for layer in self.layers])
 	#l1_norm = sum([(abs(layer.w)).sum() for layer in self.layers])
         cost2= self.layers[-1].cost(self)+0.5*lmbda*l2_norm_squared/num_training_batches 
+        cost3=self.layers[-1].cost_validation(self)+0.5*lmbda*l2_norm_squared/num_validation_batches
 	#New version with L1 regularization
 	#cost1 = self.layers[-1].cost(self)+lmbda*l1_norm/num_training_batches
         #grads = T.grad(cost, self.params)
@@ -161,6 +162,12 @@ class Network():
                 training_x[i*self.mini_batch_size: (i+1)*self.mini_batch_size],
                 self.y: 
                 training_y[i*self.mini_batch_size: (i+1)*self.mini_batch_size]
+            })
+        validation_mb = theano.function(cost3,  givens={
+                self.x: 
+                validation_x[i*self.mini_batch_size: (i+1)*self.mini_batch_size],
+                self.y: 
+                validation_y[i*self.mini_batch_size: (i+1)*self.mini_batch_size]
             })
         validate_mb_accuracy = theano.function(
             [i], self.layers[-1].accuracy(self.y),
@@ -187,74 +194,12 @@ class Network():
                 self.x: 
                 test_x[i*self.mini_batch_size: (i+1)*self.mini_batch_size]
             })
-	#Starting with specificity and sensitivity analysis
-	tru_posi = theano.function([i], self.layers[-1].tru_pos(self.y), givens={
-                self.x: 
-                validation_x[i*self.mini_batch_size: (i+1)*self.mini_batch_size],
-                self.y: 
-                validation_y[i*self.mini_batch_size: (i+1)*self.mini_batch_size]
-            })
-	tru_nega = theano.function([i], self.layers[-1].tru_neg(self.y), givens={
-                self.x: 
-                validation_x[i*self.mini_batch_size: (i+1)*self.mini_batch_size],
-                self.y: 
-                validation_y[i*self.mini_batch_size: (i+1)*self.mini_batch_size]
-            })
-	false_posi = theano.function([i], self.layers[-1].false_pos(self.y), givens={
-                self.x: 
-                validation_x[i*self.mini_batch_size: (i+1)*self.mini_batch_size],
-                self.y: 
-                validation_y[i*self.mini_batch_size: (i+1)*self.mini_batch_size]
-            })
-	false_nega = theano.function([i], self.layers[-1].false_neg(self.y), givens={
-                self.x: 
-                validation_x[i*self.mini_batch_size: (i+1)*self.mini_batch_size],
-                self.y: 
-                validation_y[i*self.mini_batch_size: (i+1)*self.mini_batch_size]
-            })
-	#For testing calculations
-	tru_posi_t = theano.function([i], self.layers[-1].tru_pos(self.y), givens={
-                self.x: 
-                test_x[i*self.mini_batch_size: (i+1)*self.mini_batch_size],
-                self.y: 
-                test_y[i*self.mini_batch_size: (i+1)*self.mini_batch_size]
-            })
-	tru_nega_t = theano.function([i], self.layers[-1].tru_neg(self.y), givens={
-                self.x: 
-                test_x[i*self.mini_batch_size: (i+1)*self.mini_batch_size],
-                self.y: 
-                test_y[i*self.mini_batch_size: (i+1)*self.mini_batch_size]
-            })
-	false_posi_t = theano.function([i], self.layers[-1].false_pos(self.y), givens={
-                self.x: 
-                test_x[i*self.mini_batch_size: (i+1)*self.mini_batch_size],
-                self.y: 
-                test_y[i*self.mini_batch_size: (i+1)*self.mini_batch_size]
-            })
-	false_nega_t = theano.function([i], self.layers[-1].false_neg(self.y), givens={
-                self.x: 
-                test_x[i*self.mini_batch_size: (i+1)*self.mini_batch_size],
-                self.y: 
-                test_y[i*self.mini_batch_size: (i+1)*self.mini_batch_size]
-            })
+	
 	#metrics for net performance
 	self.valores_test = []
 	self.valores_val = []
 	self.cost_train = []
 	self.valores_train = []
-	self.TP = []
-	self.TN = []
-	self.FN = []
-	self.FP = []
-	self.PPV = []
-	self.NPV = []
-	self.F1 = []
-	self.sensitivity = []
-	self.specificity = []
-	self.total_mini_batch = []
-	self.mcc = []
-	self.test_sensitivity = []
-	self.test_specificity = []
 
         # Do the actual training
         best_sensitivity = 0.0
@@ -268,80 +213,8 @@ class Network():
                     print("Training mini-batch number {0}".format(iteration))
                 cost_ij = train_mb(minibatch_index) #training
 		self.cost_train.append(cost_ij)
-	    TP = float(np.sum([np.size(tru_posi(j)) for j in xrange(num_validation_batches)]))
-	    TN = float(np.sum([np.size(tru_nega(j)) for j in xrange(num_validation_batches)]))
-	    FP = float(np.sum([np.size(false_posi(j)) for j in xrange(num_validation_batches)]))
-	    FN = float(np.sum([np.size(false_nega(j)) for j in xrange(num_validation_batches)]))
-	    sensitivity = TP/(TP + FN)
-	    specificity = TN/(TN + FP)
-	    total_total = TP + TN + FN + FP
-	   
-	    self.total_mini_batch.append(total_total)
-
-	    print("Epoch {0}: validation sensitivity {1:.4%}".format(epoch, sensitivity))
-	    print("Epoch {0}: validation specificity {1:.4%}".format(epoch, specificity))
-
-	    try:
-	       PPV = TP / (TP + FP)
-	       NPV = TN / (TN + FN)
-	       F1 = 2 * (PPV * sensitivity)/(PPV + sensitivity)
-	       print("Epoch {0}: validation PPV {1:.2}".format(epoch, PPV))
-	       print("Epoch {0}: validation NPV {1:.2}".format(epoch, NPV))
-	       print("Epoch {0}: validation F1 score {1:.2}".format(epoch, F1))
-
-	       mcc = (TP*TN - FP*FN)/(math.sqrt((TP + FP)*(TP + FN)*(TN + FP)*(TN + FN)))
- 	       print("Epoch {0}: MCC {1:.2}".format(epoch, mcc))
-	       self.mcc.append(0)
-	       self.PPV.append(PPV)
-	       self.NPV.append(NPV)
-	       self.F1.append(F1)
-     	       self.mcc.append(mcc)
-	       
-	       if sensitivity >= best_sensitivity:
-                    print("This is the best validation Sensitivity to date.")
-                    best_sensitivity = sensitivity
-                    best_iteration = iteration
-                    if test_data:
-			   TP_t = float(np.sum([np.size(tru_posi_t(j)) for j in xrange(num_test_batches)]))
-	    		   TN_t = float(np.sum([np.size(tru_nega_t(j)) for j in xrange(num_test_batches)]))
-	    		   FP_t = float(np.sum([np.size(false_posi_t(j)) for j in xrange(num_test_batches)]))
-	    		   FN_t = float(np.sum([np.size(false_nega_t(j)) for j in xrange(num_test_batches)]))
-			   test_sensitivity = TP_t/(TP_t + FN_t)
-	    		   test_specificity = TN_t/(TN_t + FP_t)
-		       	   self.test_sensitivity.append(test_sensitivity)
-			   self.test_specificity.append(test_specificity)
-                       	   print('The corresponding test sensitivity is {0:.2%}'.format(test_sensitivity))
-
-	    except ZeroDivisionError:
-	   	  print 'Divide by Zero motherfuckers'
-	    self.sensitivity.append(sensitivity)
-	    self.specificity.append(specificity)
-	    self.TP.append(TP)
-	    self.TN.append(TN)
-	    self.FN.append(FN)
-	    self.FP.append(FP)
-	 
-	    #prints a contingency table for each epoch
-	    print '\n	     True condition','\n\n', 'Predicted   ', 'TP: %d'%(TP), '  FP: %d'%(FP), '\n', 'condition   ','FN: %d'%(FN), '  TN: %d'%(TN), '\n'
-	   
-
-	        #self.valores_val.append(validation_accuracy)				
-            #if (iteration+1) % num_training_batches == 0:
-	    try:
-		if F1 >= best_F1:
-			best_F1 = F1
-			strikes = 0
-		else:
-			strikes = strikes + 1
-            except UnboundLocalError:
-		print "F1 wasn't calculated"
-		strikes = strikes + 1
-	
-	    if strikes == tolerance:
-		break
-              
-	self.best_sensitivity = best_sensitivity
-	self.best_iteration = best_iteration	
+		cost_val_ij = np.mean([validation_mb(j) for j in xrange(num_validation_batches)])
+	 	self.cost_validation.append(cost_val_ij)
         print("Finished training network.")
         print("Best Sensitivity of {0:.4%} obtained at iteration {1}".format(
             best_sensitivity,iteration))
