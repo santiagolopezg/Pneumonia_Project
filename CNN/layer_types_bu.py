@@ -1,5 +1,7 @@
 '''
+
 layer_types.py: This file contains all the layer types that are going to be use in a Convolutional Neural Network.
+
 28.03.2016: Created
 '''
 
@@ -36,6 +38,7 @@ class ConvPoolLayer():
     layer.  A more sophisticated implementation would separate the
     two, but for our purposes we'll always use them together, and it
     simplifies the code, so it makes sense to combine them.
+
     """
 
     def __init__(self,filter_shape,image_shape, poolsize=(2, 2), 
@@ -43,11 +46,14 @@ class ConvPoolLayer():
         """`filter_shape` is a tuple of length 4, whose entries are the number
         of filters, the number of input feature maps, the filter height, and the 
         filter width.
+
         `image_shape` is a tuple of length 4, whose entries are the
         mini-batch size, the number of input feature maps, the image
         height, and the image width.
+
         `poolsize` is a tuple of length 2, whose entries are the y and
         x pooling sizes.
+
         """
         self.filter_shape = filter_shape
         self.image_shape = image_shape
@@ -139,17 +145,6 @@ class FullyConnectedLayer():
             T.dot(self.inpt_dropout, self.w) + self.b)
 
 
-class PoolLayer():
-
-     def __init__(self,image_shape, poolsize=(2, 2)): 
-        self.image_shape = image_shape
-        self.poolsize = poolsize
-
-     def set_inpt(self, inpt, mini_batch_size):
-        self.inpt = inpt.reshape(self.image_shape)
-	pooled_out = downsample.max_pool_2d(input=self.inpt,ds=self.poolsize,ignore_border=True)
-        self.output = pooled_out
-
 
 #######################################
 class SoftmaxLayer():
@@ -184,8 +179,7 @@ class SoftmaxLayer():
     def cost(self, net):
         "Return the cross entropy cost function"
         return T.mean(categorical_crossentropy(self.output_dropout,net.y))
-    def cost_validation(self,net):
-    	return T.mean(categorical_crossentropy(self.output,net.y))
+
     def accuracy(self, y):
         "Return the accuracy for the mini-batch."
         return T.mean(T.eq(y, self.y_out))
