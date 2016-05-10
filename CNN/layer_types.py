@@ -179,7 +179,8 @@ class SoftmaxLayer():
     def cost(self, net):
         "Return the cross entropy cost function"
         return T.mean(categorical_crossentropy(self.output_dropout,net.y))
-
+    def cost_validation(self,net):
+    	return T.mean(categorical_crossentropy(self.output,net.y))
     def accuracy(self, y):
         "Return the accuracy for the mini-batch."
         return T.mean(T.eq(y, self.y_out))
