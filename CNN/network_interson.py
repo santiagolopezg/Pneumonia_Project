@@ -145,6 +145,7 @@ class Network():
         l2_norm_squared = sum([(layer.w**2).sum() for layer in self.layers])
 	#l1_norm = sum([(abs(layer.w)).sum() for layer in self.layers])
         cost2= self.layers[-1].cost(self)+0.5*lmbda*l2_norm_squared/num_training_batches 
+        cost3=self.layers[-1].cost_validation(self)+0.5*lmbda*l2_norm_squared/num_training_batches
 	#New version with L1 regularization
 	#cost1 = self.layers[-1].cost(self)+lmbda*l1_norm/num_training_batches
         #grads = T.grad(cost, self.params)
@@ -162,7 +163,7 @@ class Network():
                 self.y: 
                 training_y[i*self.mini_batch_size: (i+1)*self.mini_batch_size]
             })
-        validation_mb = theano.function(cost2, self.x:validation_x,self.y:validation_y)
+        validation_mb = theano.function(cost3, self.x:validation_x,self.y:validation_y)
         validate_mb_accuracy = theano.function(
             [i], self.layers[-1].accuracy(self.y),
             givens={
