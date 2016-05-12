@@ -19,7 +19,6 @@ for i in xrange(9):
 	CNNparams[1] += CNN[1]
 	CNNparams[2] += CNN[2]
 	CNNparams[3] += CNN[3]
-	print CNNparams
 
 	FC = cPickle.load(g)
 	g.close()
@@ -27,7 +26,6 @@ for i in xrange(9):
 	FCparams[1] += FC[1]
 	FCparams[2] += FC[2]
 	FCparams[3] += FC[3]
-	print FCparams
 
 	LR = cPickle.load(h)
 	h.close()
@@ -35,9 +33,8 @@ for i in xrange(9):
 	LRparams[1] += LR[1]
 	LRparams[2] += LR[2]
 	LRparams[3] += LR[3]
-	print LRparams
 
-for j in xrange(len(CNN)):
+for j in xrange(4):
 	try:
 		CNNparams[j] = CNNparams[j]/9.0
 	except ZeroDivisionError:
@@ -54,10 +51,11 @@ for j in xrange(len(CNN)):
 		LRparams[j] = 0
 		print 'Nuuuuuuu'
 
+for v in xrange(4):
+	CNNparams[v] = round(CNNparams[v], 4)
+	FCparams[v] = round(FCparams[v], 4)
+	LRparams[v] = round(LRparams[v], 4)
+
 print 'Cross validation results for CNN (sens, spec, F1, mcc): ', CNNparams
 print 'Cross validation results for Fully Connected network (sens, spec, F1, mcc): ', FCparams
-print 'Cross validation results for logistic regression (sens, spec, F1, mcc): ', LRparams
-
-
-
-	
+print 'Cross validation results for logistic regression (sens, spec, F1, mcc): ',LRparams

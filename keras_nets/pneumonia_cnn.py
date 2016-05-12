@@ -62,7 +62,7 @@ class LossHistory(keras.callbacks.Callback):
 
 batch_size = 100
 nb_classes = 2
-nb_epoch = 40
+nb_epoch = 70
 
 # input image dimensions
 img_rows, img_cols = 256, 256
@@ -151,52 +151,57 @@ for jk in xrange(9):
 	TP = 0
 	for i in xrange(len(y_test)):
 		if y_test[i] == 1.0 and prediction[i] == 1.0:
-			TP+=1
+			TP+=1.0
 
 		
 
 	TN = 0
 	for i in xrange(len(y_test)):
 		if y_test[i]  == 0.0 and prediction[i] == 0.0:
-			TN+= 1
+			TN+= 1.0
 
 
 	FP = 0
 	for i in xrange(len(y_test)):
 		if y_test[i] < prediction[i]:
-			FP+= 1
+			FP+= 1.0
 
 
 	FN = 0
 	for i in xrange(len(y_test)):
 		if y_test[i] > prediction[i]:
-			FN+= 1
+			FN+= 1.0
+
+	print (TP, TN, FP, FN)
 
 	sensitivity = TP/(TP + FN)
 	specificity = TN/(TN + FP)
+
+	print (sensitivity, specificity)
+
 	print('Test Sensitivity Score: {0:.2%}'.format(sensitivity))
 	print('Test Specificity Score: {0:.2%}'.format(specificity))
 
 	try:
 		PPV = TP / (TP + FP)
 		NPV = TN / (TN + FN)
-		F1 = 2 * (PPV * sensitivity)/(PPV + sensitivity)
+		F1 = 2.0 * (PPV * sensitivity)/(PPV + sensitivity)
 
 
 		mcc = (TP*TN - FP*FN)/(math.sqrt((TP + FP)*(TP + FN)*(TN + FP)*(TN + FN)))
-		print('Test F1 Score: {0:.2%}'.format(F1))
+		print('Test F1 Score: {0:.2}'.format(F1))
 
 	
 
 	except ZeroDivisionError:
-		print('Divide by Zero motherfuckers')
+		print('Divide by Zero')
 
 
 	score = model.evaluate(X_test, y_test, show_accuracy=True, verbose=0)
 	print('Test loss:', score[0])
 	print('Test accuracy:', score[1])
 
-	#Safe arquitecture of my model
+	#Save arquitecture of my model
 
 	json_string = model.to_json()
 
@@ -204,7 +209,7 @@ for jk in xrange(9):
 	from keras.models import model_from_json
 	model = model_from_json(json_string)'''
 
-	#Safe weights
+	#Save weights
 	name = 'neumonia_dataset_interson_keras_alldata_{0}_weights_cnn_{0}.h5'.format(number_db,(number_db))
 	print(name)
 	model.save_weights(name,overwrite=True)
@@ -225,7 +230,8 @@ for jk in xrange(9):
 	f.close()
 	
 	h = open('cnn_metrics_{0}.pkl'.format(number_db),'wb')
-	cPickle.dump([sensitivity,specificity,F1,mcc],h,protocol=cPickle.HIGHEST_PROTOCOL)
+	p = [sensitivity, specificity, F1, mcc]
+	cPickle.dump(p ,h,protocol=cPickle.HIGHEST_PROTOCOL)
 	h.close()
 	model.reset_states()
 	#import matplotlib.pylab as plt
