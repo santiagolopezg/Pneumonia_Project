@@ -12,6 +12,7 @@ from sklearn.grid_search import GridSearchCV
 from keras.utils import np_utils
 from keras.callbacks import EarlyStopping
 from keras.regularizers import l2, l1l2, l1
+from sklearn import preprocessing
 
 def load_data_p(number):
 	'''
@@ -53,13 +54,15 @@ class LossHistory(keras.callbacks.Callback):
 # load training data and do basic data normalization
  number_db = 5
 (X_train, y_train), (X_val, y_val), (X_test,y_test) = load_data_p(number_db)
-(X_train, y_train), (X_test, y_test) = mnist.load_data()
 X_train = X_train.reshape(X_train.shape[0], 1, img_rows, img_cols)
+X_val = X_val.reshape(X_val.shape[0], 1, img_rows, img_cols)
 X_test = X_test.reshape(X_test.shape[0], 1, img_rows, img_cols)
 X_train = X_train.astype('float32')
+X_val = X_val.astype('float32')
 X_test = X_test.astype('float32')
-X_train /= 255
-X_test /= 255
+#X_train = preprocessing.scale(X_train)
+#x_val = preprocessing.scale(X_val)
+#X_test = preprocessing.scale(X_test)
 
 # convert class vectors to binary class matrices
 #y_train = np_utils.to_categorical(y_train, nb_classes)
