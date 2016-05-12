@@ -128,7 +128,11 @@ validator = GridSearchCV(my_classifier,
                                      'batch_size'=batch_size,
                          scoring='f1_score',
                          n_jobs=1)
-validator.fit(X_train, y_train)
+                         
+early_stopping = EarlyStopping(monitor='val_loss', patience=15)
+
+
+validator.fit(X_train, y_train,show_accuracy=True, verbose=1,validation_data=(X_val, y_val),shuffle=True)
 
 print('The parameters of the best model are: ')
 print(validator.best_params_)
