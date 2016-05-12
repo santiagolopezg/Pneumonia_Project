@@ -62,7 +62,7 @@ class LossHistory(keras.callbacks.Callback):
 
 batch_size = 100
 nb_classes = 2
-nb_epoch = 20
+nb_epoch = 70
 
 # input image dimensions
 img_rows, img_cols = 256, 256
@@ -128,26 +128,26 @@ for jk in xrange(9):
 	TP = 0
 	for i in xrange(len(y_test)):
 		if y_test[i] == 1.0 and prediction[i] == 1.0:
-			TP+=1
+			TP+=1.0
 
 		
 
 	TN = 0
 	for i in xrange(len(y_test)):
 		if y_test[i]  == 0.0 and prediction[i] == 0.0:
-			TN+= 1
+			TN+= 1.0
 
 
 	FP = 0
 	for i in xrange(len(y_test)):
 		if y_test[i] < prediction[i]:
-			FP+= 1
+			FP+= 1.0
 
 
 	FN = 0
 	for i in xrange(len(y_test)):
 		if y_test[i] > prediction[i]:
-			FN+= 1
+			FN+= 1.0
 
 	sensitivity = TP/(TP + FN)
 	specificity = TN/(TN + FP)
@@ -157,7 +157,7 @@ for jk in xrange(9):
 	try:
 		PPV = TP / (TP + FP)
 		NPV = TN / (TN + FN)
-		F1 = 2 * (PPV * sensitivity)/(PPV + sensitivity)
+		F1 = 2.0 * (PPV * sensitivity)/(PPV + sensitivity)
 
 
 		mcc = (TP*TN - FP*FN)/(math.sqrt((TP + FP)*(TP + FN)*(TN + FP)*(TN + FN)))

@@ -19,6 +19,7 @@ for i in xrange(9):
 	CNNparams[1] += CNN[1]
 	CNNparams[2] += CNN[2]
 	CNNparams[3] += CNN[3]
+	print CNNparams
 
 	FC = cPickle.load(g)
 	g.close()
@@ -52,10 +53,16 @@ for j in xrange(4):
 		print 'Nuuuuuuu'
 
 for v in xrange(4):
+	print ('urgggg')
 	CNNparams[v] = round(CNNparams[v], 4)
+	print (CNNparams[v])
 	FCparams[v] = round(FCparams[v], 4)
 	LRparams[v] = round(LRparams[v], 4)
 
 print 'Cross validation results for CNN (sens, spec, F1, mcc): ', CNNparams
 print 'Cross validation results for Fully Connected network (sens, spec, F1, mcc): ', FCparams
 print 'Cross validation results for logistic regression (sens, spec, F1, mcc): ',LRparams
+
+
+
+	
