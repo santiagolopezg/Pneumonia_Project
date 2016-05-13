@@ -115,13 +115,9 @@ for jk in xrange(9):
 	model.add(Activation('relu'))
 
 	model.add(Flatten())
-	model.add(Dense(16*4*4,W_regularizer=l1l2(l1 = 0.01,l2=0.001),init='he_normal'))
+	model.add(Dense(5,W_regularizer=l1l2(l1 = 0.01,l2=0.001),init='he_normal)))
 	model.add(Activation('relu'))
 	model.add(Dropout(0.5))
-
-	#model.add(Dense(5,W_regularizer=l2(l=0.001)))
-	#model.add(Activation('relu'))
-	#model.add(Dropout(0.5))
 
 	model.add(Dense(output_dim=1))
 	model.add(Activation('sigmoid'))
