@@ -128,7 +128,7 @@ validator = GridSearchCV(my_classifier,
                                      'nb_conv': [3],
                                      'nb_pool': [2]},
                          scoring='precision',
-			 cv = 5,
+			 cv = 8,
                          n_jobs=1)
                          
 
