@@ -1,4 +1,6 @@
-#Este codigo va a correr cada uno de los mejores 8 networks 10 veces y sacar el promedio de sus performances
+'''
+This code run the best 5 network 10 times and get the average metrics for comparison
+'''
 #Libraries
 import cPickle
 import network_interson
