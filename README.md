@@ -16,7 +16,7 @@ We will use a Convolutional Neural Network to classify ultrasound images of pati
 
 * install_cudas is a txt file with intructions on how to configure Theano with a fresh install of Ubuntu 14.04 and a TITAN X GPU. These instructions have been tested in 5 computers.
 
-* The folders CNN, Fully Connected and Logistic regression contain the implementation for 3 different classifiers for comparison. This code was written in Theano, which is a Python libraty for Deep Learning. This code is legacy but functional.
+* The folders CNN, Fully Connected and Logistic regression contain the implementation for 3 different classifiers for comparison. This code was written in Theano, which is a Python library for Deep Learning. This code is legacy but functional.
 
 * The folder keras_net is the most recent implementation and the one being used for the manuscript. This code was written using the Keras wrapper for Theano and cross_validation_sklearn.py uses the Scikit-learn API for optimization and cross validation for hyperparameter search
 
