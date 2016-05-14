@@ -1,3 +1,7 @@
+'''
+cross_validation_sklearn:
+This is an implementation of a custom Convolutional Neural Network using the Scikit-Learn API for optimization
+'''
 from __future__ import print_function
 import numpy as np
 
@@ -64,13 +68,7 @@ print('X_train shape:', X_train.shape)
 print(X_train.shape[0], 'train samples')
 print(X_val.shape[0], 'val samples')
 print(X_test.shape[0], 'test samples')
-#X_train = preprocessing.scale(X_train)
-#x_val = preprocessing.scale(X_val)
-#X_test = preprocessing.scale(X_test)
 
-# convert class vectors to binary class matrices
-#y_train = np_utils.to_categorical(y_train, nb_classes)
-#y_test = np_utils.to_categorical(y_test, nb_classes)
 
 def make_model(dropout, nb_filters, nb_conv, nb_pool,weight_initiation,activation_function,l1_reg,l2_reg):
     '''Creates model comprised of 2 convolutional layers followed by dense layers
