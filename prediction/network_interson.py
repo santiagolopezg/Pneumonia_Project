@@ -46,62 +46,17 @@ from theano.tensor import tanh
 
 
 #### Constants
-GPU = True
+GPU = False
 if GPU:
-    print "Trying to run under a GPU.  If this is not desired, then modify "+\
-        "network_interson.py\nto set the GPU flag to False."
-    try: theano.config.device = 'gpu'
-    except: pass # it's already set
-    theano.config.floatX = 'float32'
-else:
-    print "Running with a CPU.  If this is not desired, then the modify "+\
-        "network_interson.py to set\nthe GPU flag to True."
+		#print "Trying to run under a GPU.  If this is not desired, then modify "+\
+        #"network_interson.py\nto set the GPU flag to False."
+    try: 
+		theano.config.device = 'gpu'
+    except:
+		pass # it's already set
+		
+    theano.config.floatX = 'float64'
 
-def errors(self, y):
-        """Return a float representing the number of errors in the minibatch
-        over the total number of examples of the minibatch ; zero one
-        loss over the size of the minibatch
-
-        :type y: theano.tensor.TensorType
-        :param y: corresponds to a vector that gives for each example the
-                  correct label
-        """
-
-        # check if y has same dimension of y_pred
-        if y.ndim != self.y_pred.ndim:
-            raise TypeError(
-                'y should have the same shape as self.y_pred',
-                ('y', y.type, 'y_pred', self.y_pred.type)
-            )
-        # check if y is of the correct datatype
-        if y.dtype.startswith('int'):
-            # the T.neq operator returns a vector of 0s and 1s, where 1
-            # represents a mistake in prediction
-            return T.mean(T.neq(self.y_pred, y))
-        else:
-            raise NotImplementedError()
-
-#### Load the Neumonia data
-def load_data_shared(filename="../data/neumonia_dataset_interson_elDeform_0_2.pkl"):
-    f = file(filename, 'rb')
-    training_data, validation_data, test_data = cPickle.load(f)
-    f.close()
-    def shared(data):
-        """Place the data into shared variables.  This allows Theano to copy
-        the data to the GPU, if one is available.
-
-        """
-        shared_x = theano.shared(
-            np.asarray(data[0], dtype=theano.config.floatX), borrow=True)
-        shared_y = theano.shared(
-            np.asarray(data[1], dtype=theano.config.floatX), borrow=True)
-        return shared_x, T.cast(shared_y, "int32")
-    return [shared(training_data), shared(validation_data), shared(test_data)]
-
-
-##################################################################################
-
-#### Main class used to construct and train networks
 class Network():
     
     def __init__(self, layers, mini_batch_size):
@@ -125,12 +80,9 @@ class Network():
         self.output_dropout = self.layers[-1].output_dropout
 
     def predict(self,test_data,mini_batch_size = 1):
-        """Train the network using mini-batch stochastic gradient descent."""	
-	self.test_mb_predictions = theano.function([self.x],self.layers[-1].y_out)
-	#metrics for net performance
-	predictions = self.test_mb_predictions(test_data)
-        # Do the actual training
-	return predictions
+	   self.test_mb_predictions = theano.function([self.x],self.layers[-1].y_out)
+	   predictions = self.test_mb_predictions(test_data)
+	   return predictions
 
 #### Miscellanea
 def size(data):

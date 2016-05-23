@@ -54,10 +54,10 @@ class ConvPoolLayer():
         self.activation_fn=activation_fn
         #initialize weights and biases
         self.w = theano.shared(
-            w, name = 'w',
+            np.asarray(w,dtype= theano.config.floatX), name = 'w',
             borrow=True)
         self.b = theano.shared(
-                b, name= 'b',
+                np.asarray(b,dtype=theano.config.floatX), name= 'b',
             borrow=True)
         self.params = [self.w, self.b]
 
@@ -81,7 +81,7 @@ class ConvLayer():
         n_out = filter_shape[0]*np.prod(filter_shape[2:])
 	
         self.w = theano.shared(
-            w,
+            np.asarray(w,dtype=theano.config.floatX),
             borrow=True)
         self.b = theano.shared(
                 np.asarray(b,
@@ -107,7 +107,7 @@ class FullyConnectedLayer():
         self.p_dropout = p_dropout
         # Initialize weights and biases
         self.w = theano.shared(
-            w,
+            np.asarray(w,dtype=theano.config.floatX),
             name='w', borrow=True)
 	self.b = theano.shared(
             np.asarray(b, dtype=theano.config.floatX),
@@ -146,10 +146,10 @@ class SoftmaxLayer():
         self.p_dropout = p_dropout
         # Initialize weights and biases
         self.w = theano.shared(
-            w,
+            np.asarray(w,dtype=theano.config.floatX),
             name='w', borrow=True)
 	self.b = theano.shared(
-            b,
+            np.asarray(b,dtype=theano.config.floatX),
             name='b', borrow=True)
         self.params = [self.w, self.b]
 

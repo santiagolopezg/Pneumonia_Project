@@ -5,21 +5,18 @@ def prediction_category(i):
 	from network_interson import Network
 	from layer_types import ConvPoolLayer, ConvLayer, FullyConnectedLayer, SigmoidLayer, SoftmaxLayer
 	from network_interson import ReLU
-	from theano.tensor import tanh
 	from scipy import ndimage
 	import numpy as np
 	import theano
+	from scipy.misc import imresize
 
 	########################################
 	#Get data
-
-	file_name = "parameters_0.001_0.001_100_0.5.pkl"
+	i = imresize(i,(256,256))
+	file_name = "C:\Users\Contabilidad\Desktop\SDK_INTERSON\IntersonSDK_8_RedConv_Filtro_v5\Red_Neuronal_and_Filter\Red_Neuronal_Conv\params_0.001_0.001_100_0.5.pkl"
 	wei = open(file_name,'rb')
-	weigh = cPickle.load(wei)
+	weights = cPickle.load(wei)
 	wei.close()
-	weights = []
-	for i in weigh:
-		weights.append(i.get_value())
 
 	net = Network([ConvLayer(image_shape=(1, 1, 256,256), filter_shape=(8, 1, 3, 3),activation_fn = ReLU, w = weights[0], b = weights[1]), ConvPoolLayer(image_shape=(1, 8, 254,254), 
 	filter_shape=(8, 8, 3, 3),poolsize=(2, 2), activation_fn = ReLU, w = weights[2], b = weights[3]),ConvPoolLayer(image_shape=(1, 8, 126,126), 
@@ -30,8 +27,7 @@ def prediction_category(i):
 					SoftmaxLayer(n_in=5, n_out=2, w = weights[24],b = weights[25])], 1)
 
 
-	image_new = ndimage.imread(i)
-	image_new = np.reshape(image_new,(1,256*256))
-	image = theano.shared(np.asarray(image_new, dtype=theano.config.floatX), borrow=True)
+	image_new = np.reshape(i,(1,256*256))
+	#image = theano.shared(np.asarray(image_new, dtype=theano.config.floatX), borrow=True)
 	a = net.predict(image_new)
-	return a
+	return a[0]
