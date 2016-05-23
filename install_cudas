@@ -61,6 +61,7 @@ conda install pydot
 conda install theano
 conda update theano  
 
+
 {if at any point, you get the message 'conda: command not found', then run this: export PATH="/home/{username}/anaconda2/bin:$PATH"
 I found that this also tends to happen with theano. When getting the message 'theano module not found' or something of the sort, run the script, or try rebooting.}
 
@@ -134,12 +135,3 @@ Haven't had to use this:
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda-7.5/lib64:
 export LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda-7.5/lib64:
 export PATH=$PATH:/usr/local/cuda-7.5/bin
-
-
-
-
-
-
-
-
-
