@@ -105,7 +105,7 @@ for jk in xrange(9):
 	model.add(Convolution2D(16, 3, 3,W_regularizer=l2(l2=0.001),init='he_normal'))
 	model.add(Activation('relu'))
 	
-  model.add(Convolution2D(16, 3, 3,W_regularizer=l2(l2=0.001),init='he_normal'))
+  	model.add(Convolution2D(16, 3, 3,W_regularizer=l2(l2=0.001),init='he_normal'))
 	model.add(Activation('relu'))
 
 	model.add(Convolution2D(16, 3, 3,W_regularizer=l2(l2=0.001),init='he_normal'))
@@ -122,7 +122,7 @@ for jk in xrange(9):
 	model.add(Convolution2D(32, 3, 3,W_regularizer=l2(l2=0.001),init='he_normal'))
 	model.add(Activation('relu'))
 	
-  model.add(Convolution2D(32, 3, 3,W_regularizer=l2(l2=0.001),init='he_normal'))
+  	model.add(Convolution2D(32, 3, 3,W_regularizer=l2(l2=0.001),init='he_normal'))
 	model.add(Activation('relu'))
 	model.add(MaxPooling2D(pool_size=(nb_pool, nb_pool)))
 
